@@ -1,11 +1,19 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const cors = require("cors");
 
 const app = express();
 
 const port = process.env.PORT || 3000;
 
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  }),
+);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/bilder", (req, res) => {
@@ -17,7 +25,7 @@ app.get("/bilder", (req, res) => {
       return;
     }
 
-    const bildFiler = filer.filter((fil) => /\.(jpg|jpeg|png)$/i.text(fil));
+    const bildFiler = filer.filter((fil) => /\.(jpg|jpeg|png)$/i.test(fil));
     res.json(bildFiler);
   });
 });
